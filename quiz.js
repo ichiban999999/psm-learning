@@ -153,7 +153,7 @@ function updateSidebarStats() {
 
 // ===== 測驗功能 =====
 let currentQuizQuestions = [];
-let currentQuestionIndex = 0;
+// currentQuestionIndex is already declared in app.js - reuse it
 let correctCount = 0;
 let wrongCount = 0;
 let answeredQuestions = {};
