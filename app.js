@@ -1,4 +1,5 @@
 // ===== 全域變數 =====
+// Version: 2026-07-04-1808 - Fixed chapter content loading
 let currentSection = 0;
 let currentQuestionIndex = 0;
 let quizQuestions = [];
