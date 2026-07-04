@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模擬考試 - PSM I 學習系統</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 側邊導航 -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🎯 PSM I</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span>學習儀表板</span>
+            </a></li>
+            <li><a href="study.html" class="nav-link" data-page="study">
+                <span class="nav-icon">📖</span>
+                <span>章節學習</span>
+            </a></li>
+            <li><a href="quiz.html" class="nav-link" data-page="quiz">
+                <span class="nav-icon">📝</span>
+                <span>刷題測驗</span>
+            </a></li>
+            <li><a href="mock_exam.html" class="nav-link active" data-page="exam">
+                <span class="nav-icon">⏱️</span>
+                <span>模擬考試</span>
+            </a></li>
+            <li><a href="progress.html" class="nav-link" data-page="progress">
+                <span class="nav-icon">📈</span>
+                <span>進度追蹤</span>
+            </a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="stats-mini">
+                <div class="stat-item">
+                    <span class="stat-label">已做題數</span>
+                    <span class="stat-value" id="total-answered">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">答對率</span>
+                    <span class="stat-value" id="accuracy-rate">0%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1>⏱️ 模擬考試</h1>
+            <div class="header-actions"></div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- 考試設定 -->
+            <div id="examSetup" class="exam-setup">
+                <h3>考試設定</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                    模擬真實 PSM I 考試環境：60 分鐘、80 題、需要 85% 答對率才能通過
+                </p>
+                
+                <div class="exam-options">
+                    <div class="exam-option-group">
+                        <label>題庫範圍</label>
+                        <select id="examRange">
+                            <option value="all">全部題庫 (80題)</option>
+                            <option value="section1">僅第一大題庫 (30題)</option>
+                            <option value="section2">僅第二大題庫 (25題)</option>
+                            <option value="section3">僅第三大題庫 (25題)</option>
+                            <option value="section4">僅第四大題庫 (20題)</option>
+                        </select>
+                    </div>
+                    <div class="exam-option-group">
+                        <label>計時模式</label>
+                        <select id="examTimer">
+                            <option value="60">真實模式：60 分鐘</option>
+                            <option value="90">延長模式：90 分鐘</option>
+                            <option value="0">不限時（練習模式）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startExam()" style="width: 100%; justify-content: center;">
+                    🚀 開始考試
+                </button>
+            </div>
+
+            <!-- 考試區域 -->
+            <div id="examArea" style="display: none;">
+                <div class="exam-timer" id="examTimerDisplay">60:00</div>
+                
+                <div class="quiz-area">
+                    <div class="quiz-header">
+                        <div class="quiz-progress">
+                            題目 <span id="examCurrentQuestion">1</span> / <span id="examTotalQuestions">80</span>
+                        </div>
+                        <div class="quiz-score">
+                            <span class="score-item score-correct">✓ <span id="examCorrectCount">0</span></span>
+                            <span class="score-item score-wrong">✗ <span id="examWrongCount">0</span></span>
+                        </div>
+                    </div>
+
+                    <!-- 題目導航 -->
+                    <div class="question-nav" style="margin-bottom: 20px;">
+                        <div id="questionNavGrid" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
+                    </div>
+
+                    <div id="examQuestionContainer" class="question-card">
+                        <!-- 題目內容會由 JS 動態插入 -->
+                    </div>
+
+                    <div class="quiz-actions">
+                        <button class="btn btn-secondary" id="examPrevBtn" onclick="examPrevQuestion()" disabled>上一題</button>
+                        <button class="btn btn-secondary" onclick="flagQuestion()">🚩 標記</button>
+                        <button class="btn btn-primary" id="examNextBtn" onclick="examNextQuestion()">下一題</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 結果彈窗 -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal">
+            <h2 id="resultTitle">考試結果</h2>
+            <div class="result-score" id="resultScore">85%</div>
+            <p class="result-message" id="resultMessage">恭喜通過！</p>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="reviewExam()">📋 檢視解析</button>
+                <button class="btn btn-secondary" onclick="closeModal()">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 聊天視窗按鈕 -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">💬</button>
+
+    <!-- 聊天視窗 -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>🤖 Agnes AI 教練</h3>
+            <button class="chat-close" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    你好！我是 Agnes AI 教練，考試後有任何問題都可以問我！
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="輸入你的問題..." onkeypress="handleChatKeypress(event)">
+            <button onclick="sendChatMessage()">發送</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="quiz.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSidebarStats();
+        });
+    </script>
+</body>
+</html>

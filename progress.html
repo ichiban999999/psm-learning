@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>進度追蹤 - PSM I 學習系統</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 側邊導航 -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🎯 PSM I</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span>學習儀表板</span>
+            </a></li>
+            <li><a href="study.html" class="nav-link" data-page="study">
+                <span class="nav-icon">📖</span>
+                <span>章節學習</span>
+            </a></li>
+            <li><a href="quiz.html" class="nav-link" data-page="quiz">
+                <span class="nav-icon">📝</span>
+                <span>刷題測驗</span>
+            </a></li>
+            <li><a href="mock_exam.html" class="nav-link" data-page="exam">
+                <span class="nav-icon">⏱️</span>
+                <span>模擬考試</span>
+            </a></li>
+            <li><a href="progress.html" class="nav-link active" data-page="progress">
+                <span class="nav-icon">📈</span>
+                <span>進度追蹤</span>
+            </a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="stats-mini">
+                <div class="stat-item">
+                    <span class="stat-label">已做題數</span>
+                    <span class="stat-value" id="total-answered">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">答對率</span>
+                    <span class="stat-value" id="accuracy-rate">0%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1>📈 進度追蹤</h1>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="exportProgress()" title="匯出進度">📤</button>
+                <button class="btn-icon" onclick="resetProgress()" title="重置進度">🔄</button>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="progress-container">
+                <!-- 統計卡片 -->
+                <div class="stats-grid">
+                    <div class="stat-card-large">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-number" id="statTotalAnswered">0</div>
+                        <div class="stat-label">已做題數</div>
+                    </div>
+                    <div class="stat-card-large">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-number" id="statCorrect">0</div>
+                        <div class="stat-label">答對題數</div>
+                    </div>
+                    <div class="stat-card-large">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-number" id="statAccuracy">0%</div>
+                        <div class="stat-label">答對率</div>
+                    </div>
+                    <div class="stat-card-large">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-number" id="statExamScore">0%</div>
+                        <div class="stat-label">模擬考最高分</div>
+                    </div>
+                </div>
+
+                <!-- 各章節進度 -->
+                <div class="chart-container">
+                    <h3>📊 各章節練習進度</h3>
+                    <div class="bar-chart" id="sectionProgressChart">
+                        <!-- 由 JS 動態生成 -->
+                    </div>
+                </div>
+
+                <!-- 各章節答對率 -->
+                <div class="chart-container">
+                    <h3>🎯 各章節答對率</h3>
+                    <div class="bar-chart" id="sectionAccuracyChart">
+                        <!-- 由 JS 動態生成 -->
+                    </div>
+                </div>
+
+                <!-- 模擬考試歷史 -->
+                <div class="chart-container">
+                    <h3>📋 模擬考試歷史</h3>
+                    <div id="examHistoryList" class="weak-list">
+                        <p style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                            尚無考試記錄，快去模擬考試頁面挑戰吧！
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 弱點題目 -->
+                <div class="chart-container">
+                    <h3>⚠️ 需要加強的題目（答錯 2 次以上）</h3>
+                    <div id="weakQuestionsList" class="weak-list">
+                        <p style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                            太棒了！目前沒有需要加強的題目。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 快速練習弱點 -->
+                <div class="chart-container" id="weakReviewContainer" style="display: none;">
+                    <h3>🔄 弱點複習</h3>
+                    <p style="margin-bottom: 15px; color: var(--text-secondary);">
+                        這裡是你答錯次數最多的題目，建議優先練習這些題目！
+                    </p>
+                    <button class="btn btn-primary" onclick="startWeakReview()" style="width: 100%; justify-content: center;">
+                        🎯 開始弱點複習
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 聊天視窗按鈕 -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">💬</button>
+
+    <!-- 聊天視窗 -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>🤖 Agnes AI 教練</h3>
+            <button class="chat-close" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    你好！我是 Agnes AI 教練，看到你的進度報告後，有任何問題都可以問我！
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="輸入你的問題..." onkeypress="handleChatKeypress(event)">
+            <button onclick="sendChatMessage()">發送</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="quiz.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSidebarStats();
+            loadProgressPage();
+        });
+    </script>
+</body>
+</html>

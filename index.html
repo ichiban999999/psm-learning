@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>PSM I 學習系統 - Professional Scrum Master</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 側邊導航 -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🎯 PSM I</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link active" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span>學習儀表板</span>
+            </a></li>
+            <li><a href="study.html" class="nav-link" data-page="study">
+                <span class="nav-icon">📖</span>
+                <span>章節學習</span>
+            </a></li>
+            <li><a href="quiz.html" class="nav-link" data-page="quiz">
+                <span class="nav-icon">📝</span>
+                <span>刷題測驗</span>
+            </a></li>
+            <li><a href="mock_exam.html" class="nav-link" data-page="exam">
+                <span class="nav-icon">⏱️</span>
+                <span>模擬考試</span>
+            </a></li>
+            <li><a href="progress.html" class="nav-link" data-page="progress">
+                <span class="nav-icon">📈</span>
+                <span>進度追蹤</span>
+            </a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="stats-mini">
+                <div class="stat-item">
+                    <span class="stat-label">已做題數</span>
+                    <span class="stat-value" id="total-answered">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">答對率</span>
+                    <span class="stat-value" id="accuracy-rate">0%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="main-content">
+        <!-- 頂部導航 -->
+        <header class="top-header">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1>PSM I 學習儀表板</h1>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="resetProgress()" title="重置進度">🔄</button>
+            </div>
+        </header>
+
+        <!-- 儀表板內容 -->
+        <div class="dashboard-content">
+            <!-- 歡迎區塊 -->
+            <section class="welcome-banner">
+                <div class="welcome-text">
+                    <h2>歡迎來到 PSM I 學習系統！🚀</h2>
+                    <p>這裡有完整的 Scrum Guide 中英對照學習內容和 100+ 題精選練習題，幫助你高效通過 PSM I 考試！</p>
+                </div>
+                <div class="welcome-stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="total-questions">100</span>
+                        <span class="stat-label">總題數</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="completed-questions">0</span>
+                        <span class="stat-label">已完成</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="pass-rate">0%</span>
+                        <span class="stat-label">平均答對率</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 學習進度概覽 -->
+            <section class="progress-overview">
+                <h3>📊 學習進度概覽</h3>
+                <div class="progress-bars">
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-title">第一大題庫：三大角色篇</span>
+                            <span class="progress-count"><span class="done">0</span> / 30 題</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" data-section="1" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-title">第二大題庫：五大事件篇</span>
+                            <span class="progress-count"><span class="done">0</span> / 25 題</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" data-section="2" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-title">第三大題庫：三大產出物篇</span>
+                            <span class="progress-count"><span class="done">0</span> / 25 題</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" data-section="3" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-info">
+                            <span class="progress-title">第四大題庫：綜合情境題</span>
+                            <span class="progress-count"><span class="done">0</span> / 20 題</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" data-section="4" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 快速開始 -->
+            <section class="quick-start">
+                <h3>⚡ 快速開始</h3>
+                <div class="quick-cards">
+                    <a href="study.html" class="quick-card">
+                        <div class="card-icon">📖</div>
+                        <h4>複習章節</h4>
+                        <p>查看 Scrum Guide 中英對照重點</p>
+                    </a>
+                    <a href="quiz.html" class="quick-card">
+                        <div class="card-icon">📝</div>
+                        <h4>開始刷題</h4>
+                        <p>選擇題庫章節進行練習</p>
+                    </a>
+                    <a href="mock_exam.html" class="quick-card">
+                        <div class="card-icon">⏱️</div>
+                        <h4>模擬考試</h4>
+                        <p>60分鐘真實模擬測驗</p>
+                    </a>
+                    <a href="progress.html" class="quick-card">
+                        <div class="card-icon">📈</div>
+                        <h4>查看進度</h4>
+                        <p>分析弱點與學習統計</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 考試資訊 -->
+            <section class="exam-info">
+                <h3>📋 PSM I 考試基本資訊</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-icon">💰</span>
+                        <div>
+                            <h4>考試費用</h4>
+                            <p>$150 美元（約台幣 $4,800-5,000）</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📝</span>
+                        <div>
+                            <h4>題型與題數</h4>
+                            <p>80 題（單選、複選、是非）</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⏱️</span>
+                        <div>
+                            <h4>考試時間</h4>
+                            <p>60 分鐘（每題約 45 秒）</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">✅</span>
+                        <div>
+                            <h4>及格標準</h4>
+                            <p>85% 答對率（需答對 68 題以上）</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🌐</span>
+                        <div>
+                            <h4>考試方式</h4>
+                            <p>線上遠端考試，在家即可考</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">♾️</span>
+                        <div>
+                            <h4>證照效期</h4>
+                            <p>終身有效，不需續約費</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 每日一句 -->
+            <section class="daily-tip">
+                <h3>💡 每日 Scrum 金句</h3>
+                <blockquote id="daily-quote">
+                    <p>"Scrum 不是理論，它是基於經驗主義和漸進式過程控制的方法。"</p>
+                    <footer>— Scrum Guide</footer>
+                </blockquote>
+            </section>
+        </div>
+    </main>
+
+    <!-- 聊天視窗按鈕 -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">💬</button>
+
+    <!-- 聊天視窗 -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>🤖 Agnes AI 教練</h3>
+            <button class="chat-close" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    你好！我是 Agnes AI 教練，有任何 PSM I 的問題都可以問我！例如：
+                    <ul>
+                        <li>Scrum 的三大角色是什麼？</li>
+                        <li>Sprint Planning 要做什麼？</li>
+                        <li>什麼是 Definition of Done？</li>
+                    </ul>
+                    請隨時提問！
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="輸入你的問題..." onkeypress="handleChatKeypress(event)">
+            <button onclick="sendChatMessage()">發送</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboardStats();
+            loadDailyQuote();
+        });
+    </script>
+</body>
+</html>

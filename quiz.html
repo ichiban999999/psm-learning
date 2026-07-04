@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刷題測驗 - PSM I 學習系統</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 側邊導航 -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🎯 PSM I</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span>學習儀表板</span>
+            </a></li>
+            <li><a href="study.html" class="nav-link" data-page="study">
+                <span class="nav-icon">📖</span>
+                <span>章節學習</span>
+            </a></li>
+            <li><a href="quiz.html" class="nav-link active" data-page="quiz">
+                <span class="nav-icon">📝</span>
+                <span>刷題測驗</span>
+            </a></li>
+            <li><a href="mock_exam.html" class="nav-link" data-page="exam">
+                <span class="nav-icon">⏱️</span>
+                <span>模擬考試</span>
+            </a></li>
+            <li><a href="progress.html" class="nav-link" data-page="progress">
+                <span class="nav-icon">📈</span>
+                <span>進度追蹤</span>
+            </a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="stats-mini">
+                <div class="stat-item">
+                    <span class="stat-label">已做題數</span>
+                    <span class="stat-value" id="total-answered">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">答對率</span>
+                    <span class="stat-value" id="accuracy-rate">0%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1>📝 刷題測驗</h1>
+            <div class="header-actions"></div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="quiz-container">
+                <!-- 題庫選擇 -->
+                <div id="quizSelector" class="quiz-selector">
+                    <h3>選擇題庫章節</h3>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="startQuiz(1)">
+                            <div class="option-icon">👥</div>
+                            <div class="option-title">第一大題庫</div>
+                            <div class="option-count">三大角色篇 (30題)</div>
+                        </div>
+                        <div class="quiz-option" onclick="startQuiz(2)">
+                            <div class="option-icon">📅</div>
+                            <div class="option-title">第二大題庫</div>
+                            <div class="option-count">五大事件篇 (25題)</div>
+                        </div>
+                        <div class="quiz-option" onclick="startQuiz(3)">
+                            <div class="option-icon">📦</div>
+                            <div class="option-title">第三大題庫</div>
+                            <div class="option-count">三大產出物篇 (25題)</div>
+                        </div>
+                        <div class="quiz-option" onclick="startQuiz(4)">
+                            <div class="option-icon">🎯</div>
+                            <div class="option-title">第四大題庫</div>
+                            <div class="option-count">綜合情境題 (20題)</div>
+                        </div>
+                        <div class="quiz-option" onclick="startQuiz(0)">
+                            <div class="option-icon">🔀</div>
+                            <div class="option-title">隨機練習</div>
+                            <div class="option-count">全部題庫隨機 (100題)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 測驗區域 -->
+                <div id="quizArea" class="quiz-area" style="display: none;">
+                    <div class="quiz-header">
+                        <div class="quiz-progress">
+                            題目 <span id="currentQuestion">1</span> / <span id="totalQuestions">30</span>
+                        </div>
+                        <div class="quiz-score">
+                            <span class="score-item score-correct">✓ <span id="correctCount">0</span></span>
+                            <span class="score-item score-wrong">✗ <span id="wrongCount">0</span></span>
+                        </div>
+                    </div>
+                    
+                    <div id="questionContainer" class="question-card">
+                        <!-- 題目內容會由 JS 動態插入 -->
+                    </div>
+
+                    <div class="quiz-actions">
+                        <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" disabled>上一題</button>
+                        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">下一題</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 聊天視窗按鈕 -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">💬</button>
+
+    <!-- 聊天視窗 -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>🤖 Agnes AI 教練</h3>
+            <button class="chat-close" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    你好！我是 Agnes AI 教練，有任何題目不懂都可以問我！
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="輸入你的問題..." onkeypress="handleChatKeypress(event)">
+            <button onclick="sendChatMessage()">發送</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="quiz.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSidebarStats();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>章節學習 - PSM I 學習系統</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 側邊導航 -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🎯 PSM I</h2>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span>學習儀表板</span>
+            </a></li>
+            <li><a href="study.html" class="nav-link active" data-page="study">
+                <span class="nav-icon">📖</span>
+                <span>章節學習</span>
+            </a></li>
+            <li><a href="quiz.html" class="nav-link" data-page="quiz">
+                <span class="nav-icon">📝</span>
+                <span>刷題測驗</span>
+            </a></li>
+            <li><a href="mock_exam.html" class="nav-link" data-page="exam">
+                <span class="nav-icon">⏱️</span>
+                <span>模擬考試</span>
+            </a></li>
+            <li><a href="progress.html" class="nav-link" data-page="progress">
+                <span class="nav-icon">📈</span>
+                <span>進度追蹤</span>
+            </a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="stats-mini">
+                <div class="stat-item">
+                    <span class="stat-label">已做題數</span>
+                    <span class="stat-value" id="total-answered">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">答對率</span>
+                    <span class="stat-value" id="accuracy-rate">0%</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1>📖 章節學習</h1>
+            <div class="header-actions"></div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="study-container">
+                <!-- 章節選擇 -->
+                <div id="chapterList" class="chapter-list">
+                    <h3>選擇學習章節</h3>
+                    <div class="chapter-card" onclick="showChapter(1)">
+                        <h3>📘 第一章：Scrum 概述</h3>
+                        <p>Scrum 的定義、理論基礎、價值觀和原則</p>
+                        <span class="chapter-status not-started" id="status-1">未開始</span>
+                    </div>
+                    <div class="chapter-card" onclick="showChapter(2)">
+                        <h3>👥 第二章：Scrum 團隊</h3>
+                        <p>開發團隊、產品負責人、Scrum Master 的職責與權限</p>
+                        <span class="chapter-status not-started" id="status-2">未開始</span>
+                    </div>
+                    <div class="chapter-card" onclick="showChapter(3)">
+                        <h3>📅 第三章：Scrum 事件</h3>
+                        <p>Sprint、Sprint Planning、Daily Scrum、Review、Retrospective</p>
+                        <span class="chapter-status not-started" id="status-3">未開始</span>
+                    </div>
+                    <div class="chapter-card" onclick="showChapter(4)">
+                        <h3>📦 第四章：Scrum 產出物</h3>
+                        <p>產品待辦清單、Sprint 待辦清單、增量、Definition of Done</p>
+                        <span class="chapter-status not-started" id="status-4">未開始</span>
+                    </div>
+                    <div class="chapter-card" onclick="showChapter(5)">
+                        <h3>🎯 第五章：考試重點與技巧</h3>
+                        <p>關鍵字識別、常見陷阱題、答題策略</p>
+                        <span class="chapter-status not-started" id="status-5">未開始</span>
+                    </div>
+                </div>
+
+                <!-- 章節內容 -->
+                <div id="chapterContent" class="study-content" style="display: none;">
+                    <button class="back-btn" onclick="backToChapters()">← 返回章節列表</button>
+                    <div id="chapterBody"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 聊天視窗按鈕 -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">💬</button>
+
+    <!-- 聊天視窗 -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>🤖 Agnes AI 教練</h3>
+            <button class="chat-close" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <div class="message-content">
+                    你好！我是 Agnes AI 教練，學習過程中有任何問題都可以問我！
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="輸入你的問題..." onkeypress="handleChatKeypress(event)">
+            <button onclick="sendChatMessage()">發送</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSidebarStats();
+        });
+    </script>
+</body>
+</html>
