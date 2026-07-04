@@ -1,0 +1,32 @@
+# Netlify 快取設定
+[[redirects]]
+from = "/app.js"
+to = "/app.js"
+status = 200
+force = true
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+Cache-Control = "no-cache, no-store, must-revalidate"
+Pragma = "no-cache"
+Expires = "0"
+
+[[headers]]
+for = "/app.js"
+
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+for = "/style.css"
+
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+for = "/quiz.js"
+
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
